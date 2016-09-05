@@ -6,69 +6,56 @@ easy_questions = "There are " + blanks[0] +" days in a year, and " + blanks[1] +
 medium_questions = "The state of CA sits comfortably on the " + blanks[0] +" coast of USA. It's massive " + blanks[1] +" is the largest in the country, and is larger than several countries. A driving force of that has been the " + blanks[2] +" sector, positioned in northern CA. The city of " + blanks[3] +" has the largest population in the state."
 hard_questions = "The biggest sports network on american tv is known as " + blanks[0] +" , and broadcasts primarily from studio facilities located in the state of " + blanks[1] +". It was founded in " + blanks[2] +" and has been able to stay relevent since then. The number one produced show on the network is known as " + blanks[3] +" and has been the flagship show since day one of the networks inception."
 
+#difficulty levels
+difficulty_levels = ["easy", "medium", "hard"]
+
 #answers by answer level
 easy_answers= [["365"],["7"],["52"],["7"]]
-medium_answers = [["west", "West"], ["economy", "Economy"], ["tech", "technology", "Technology"], ["la", "LA", "los angeles", "Los Angeles"]]
-hard_answers= [["ESPN", "espn"], ["Connecticut", "connecticut", "conn", "Conn", "CONN"], ["1979"], ["sportscenter", "sc", "Sportscenter"]]
+medium_answers = [["west"], ["economy"], ["tech", "technology"], ["la", "los angeles"]]
+hard_answers= [["espn"], ["connecticut", "conn"], ["1979"], ["sportscenter", "sc"]]
 
-def first_thing ():# very first question, what game are they going to play. users selects difficulty_level then loads quiz_chosen.
-	print
-	difficulty_level = raw_input("Please select a game difficulty by typing it in! Possible choices include easy, medium, or hard:" )
-	input = raw_input
-	print
-	print ("You choose " + difficulty_level + "!")
-	return quiz_chosen(difficulty_level)
-
-def quiz_chosen(quiz): #prints the quiz based upon the users input
-	if quiz == "easy":
-		print
+def first_thing ():
+	""" very first question, what game are they going to play. users selects difficulty_level then loads quiz_chosen.   """
+	difficulty_chosen = raw_input("\nPlease select a game difficulty by typing it in! Possible choices include easy, medium, or hard:" )
+	print ("\nYou choose " + difficulty_chosen + "!\n")
+	while difficulty_chosen not in difficulty_levels:
+		print difficulty_chosen + " is not a choice.\n"
+		difficulty_chosen = raw_input("Please select a game difficulty by typing it in! Possible choices include easy, medium, or hard:" )
+	if difficulty_chosen == "easy":
 		return questions(easy_answers, easy_questions)
-	elif quiz == "medium":
-		print
+	elif difficulty_chosen == "medium":
 		return questions(medium_answers, medium_questions)
-	elif quiz == "hard":
-		print
+	elif difficulty_chosen == "hard":
 		return questions(hard_answers, hard_questions)
-	else:
-		print
-		print "Sorry " + quiz + "'s not an option."
-		return first_thing()
 
-def questions(their_answer, quiz_question): #asks the questions and determines if the answers are correct or not. user can get the answer wrong 5 times before having to restart the entire quiz over.
-	i = 0
-	chances = 5
-	while i < 4:
-		print quiz_question
-		print
+def questions(their_answer, quiz_question):
+	""" this asks the questions and determines if the answers are correct or not. user can get the answer wronge 5 times before headed to the next function- win or lose. """
+	i, chances = 0, 5
+	while i < len(blanks) and chances > 0:
+		print "\n" + quiz_question + "\n"
 		user_answer = raw_input("What should be substituted for " + blanks[i] + ":" )
+		user_answer = user_answer.strip( ' .' )
+		user_answer = user_answer.lower()
 		if user_answer in their_answer[i]:
-			print
-			print "That's Correct!"
-			print
 			quiz_question = quiz_question.replace(blanks[i], user_answer)
+			print "\nThat's Correct!"
 			i += 1
 		else:
-			chances = chances - 1
-			if chances < 1:
-				print "Sorry, you lost!"
-				return first_thing()
-			else:
-				print user_answer + " is not correct."
-				print "You have " + str(chances) + " chances left!"
-				print
-	print quiz_question
-	return play_again()
+			chances -= 1
+			print "\n" + user_answer + " is not correct.\n\nYou have " + str(chances) + " chances left!\n"
+	return win_or_lose(quiz_question, chances)				
 
-
-def play_again(): #asks to restart the quiz once they have passed to see if the user wants to play agian. or simply stop the program.
-	print
-	print "Great work!!"
-	print
+def win_or_lose(quiz_question, chances):
+	""" restarts the quiz based upon if they won or lost"""
+	if chances != 0:
+		print "\n" + quiz_question
+		print "\nGreat work!!\n"
+	elif chances ==0:
+		print "\nSorry, you lost!\n"
 	lets_go = raw_input("Would you like to play again? (y or n): ")
 	if lets_go == "y":
 		print first_thing()
 	else:
-		print
-		return "Thanks for playing!"
+		return "\nThanks for playing!"
 
 print first_thing() #starts things off.
