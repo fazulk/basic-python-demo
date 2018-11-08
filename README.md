@@ -1,2 +1,2 @@
-# udacity
-for working on udacity projects
+# simple quiz
+using python
