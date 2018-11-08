@@ -1,2 +1,2 @@
 # simple quiz
-using python
+written in python
